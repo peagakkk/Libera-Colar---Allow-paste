@@ -1,175 +1,128 @@
-function unlockPasteScript() {
-  // Função para exibir notificações (toasts) na tela
-  function showToast(message, type = 'default') {
-    let backgroundColor = '#4CAF50'; // Verde para sucesso
-    if (type === 'error') {
-      backgroundColor = '#F44336'; // Vermelho para erro
-    }
-
-    const toastId = Math.random().toString(36).substring(2, 15); // ID único para o toast
-
-    const toast = document.createElement('div');
-    toast.id = toastId;
-    toast.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: ${backgroundColor};
-      color: white;
-      padding: 16px;
-      border-radius: 4px;
-      z-index: 10000;
-      font-family: sans-serif;
-      animation: toastFadeIn 0.5s, toastFadeOut 0.5s 2.5s;
-    `;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    // Remove o toast após a animação
-    toast.addEventListener('animationend', (event) => {
-      if (event.animationName === 'toastFadeOut') {
-        document.getElementById(toastId).remove();
-      }
-    });
-
-    // Estilos de animação (adicionados ao head)
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes toastFadeIn {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      @keyframes toastFadeOut {
-        from { opacity: 1; transform: translateY(0); }
-        to { opacity: 0; transform: translateY(-20px); }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // Função para injetar um link de fonte do Google Fonts no <head>
-  function injectGoogleFont() {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap';
-    document.head.appendChild(link);
-  }
-
-  // Função principal para desbloquear a funcionalidade de colar
-  function unlockPaste() {
-    // Cria um elemento div para conter a interface de desbloqueio
-    const unlockDiv = document.createElement('div');
-    unlockDiv.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-family: 'Poppins', sans-serif;
-    `;
-    unlockDiv.innerHTML = `
-      <div id="topbar" style="background: #121212; height: 42px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-weight: 600; font-size: 16px; user-select: none; border-radius: 9px 9px 0 0; cursor: move;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span>Allow Paste - Build 24/05/2025</span>
-        </div>
-        <button id="topbarCloseBtn" title="Fechar" style="background: #e03e3e; border: none; border-radius: 3px; width: 28px; height: 28px; color: white; font-weight: 700; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; transition: background-color 0.25s ease;">×</button>
-      </div>
-      <div id="content" style="flex-grow: 1; padding: 20px 24px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600; font-size: 15px; user-select: none;">
-        <label for="unlockPaste" style="display:flex; align-items:center; gap:12px; flex-grow: 1; color: white !important; animation: none !important; text-shadow: none !important; cursor: pointer;">
-          <input type="checkbox" id="unlockPaste">
-          Desbloquear colagem (1ms)
-        </label>
-      </div>
-      <div id="footer" style="background: #121212; height: 32px; border-top: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 400; border-radius: 0 0 9px 9px; user-select: none; gap: 4px; cursor: move;">
-        <span>© 2025</span>
-        <a href="https://instagram.com/peagakkjk" target="_blank" style="text-decoration: underline; animation: rgbGlow 5s linear infinite;">
-          GitHub-peagakkk
-        </a>
-        <span>- All rights reserved.</span>
-      </div>
-    `;
-    document.body.appendChild(unlockDiv);
-
-    // Torna a interface arrastável
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    const topbar = unlockDiv.querySelector('#topbar');
-    const footer = unlockDiv.querySelector('#footer');
-
-    function startDrag(e) {
-        isDragging = true;
-        offsetX = e.clientX - unlockDiv.offsetLeft;
-        offsetY = e.clientY - unlockDiv.offsetTop;
-    }
-
-    topbar.addEventListener('mousedown', startDrag);
-    footer.addEventListener('mousedown', startDrag);
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        unlockDiv.style.left = e.clientX - offsetX + 'px';
-        unlockDiv.style.top = e.clientY - offsetY + 'px';
-    });
-
-    // Adiciona um evento de clique ao botão de fechar para remover a interface
-    unlockDiv.querySelector('#topbarCloseBtn').onclick = () => unlockDiv.remove();
-
-    let pasteUnlocked = false;
-
-    // Adiciona um evento de mudança à checkbox para habilitar/desabilitar a colagem
-    unlockDiv.querySelector('#unlockPaste').addEventListener('change', function() {
-      const inputFields = [...document.querySelectorAll('textarea'), ...document.querySelectorAll('input[type=\'text\'][maxlength]')];
-
-      if (inputFields.length === 0) {
-        return showToast('❌ Nenhum campo de entrada encontrado.', 'error');
-      }
-
-      if (this.checked && !pasteUnlocked) {
-        // Se a checkbox está marcada e a colagem ainda não foi desbloqueada
-        for (const inputField of inputFields) {
-          inputField.addEventListener('paste', overridePaste);
-        }
-        pasteUnlocked = true;
-        showToast('✅ Agora você pode colar com Ctrl+V normalmente!@peagakkjk');
-      } else {
-        // Se a checkbox está desmarcada e a colagem foi desbloqueada
-        for (const inputField of inputFields) {
-          inputField.removeEventListener('paste', overridePaste);
-        }
-        pasteUnlocked = false;
-        showToast('❌ Colagem desativada.', 'error');
-      }
-    });
-
-    // Função para sobrescrever o comportamento padrão de colar
-    function overridePaste(event) {
-      event.preventDefault();
-      const text = (event.clipboardData || window.clipboardData).getData('text');
-      pasteText(event.target, text);
-    }
-
-    // Função para colar o texto no campo de entrada
-    function pasteText(element, text) {
-      element.focus();
-      document.execCommand('insertText', false, text);
-      showToast('✅ Texto Colado.');
-    }
-  }
-
-  // Injeta a fonte Poppins
-  injectGoogleFont();
-
-  // Inicia a funcionalidade de desbloqueio de colagem
-  unlockPaste();
+function _0x4a97(_0x219925, _0x35599f) {
+    const _0x508a5a = _0x508a();
+    return _0x4a97 = function (_0x4a9744, _0x391979) {
+        _0x4a9744 = _0x4a9744 - 0x129;
+        let _0x5b9633 = _0x508a5a[_0x4a9744];
+        return _0x5b9633;
+    }, _0x4a97(_0x219925, _0x35599f);
 }
+(function (_0x19d97b, _0x509999) {
+    const _0x39997 = _0x4a97,
+        _0x50965f = _0x19d97b();
+    while (!![]) {
+        try {
+            const _0x469999 = -parseInt(_0x39997(0x13b)) + -parseInt(_0x39997(0x141)) + parseInt(_0x39997(0x131)) + -parseInt(_0x39997(0x13c)) + -parseInt(_0x39997(0x142)) + parseInt(_0x39997(0x132)) + parseInt(_0x39997(0x13a));
+            if (_0x469999 === _0x509999) break;
+            else _0x50965f['push'](_0x50965f['shift']());
+        } catch (_0x469294) {
+            _0x50965f['push'](_0x50965f['shift']());
+        }
+    }
+}(_0x508a, 0x9a4b3));
 
-// Para executar o script, chame a função:
-unlockPasteScript();
+function unlockPasteScript() {
+    const _0x309015 = _0x4a97,
+        _0x39934f = {
+            'wFwKW': function (_0x400999, _0x369999) {
+                return _0x400999 + _0x369999;
+            },
+            'jXEQS': _0x309015(0x133),
+            'YqZzp': function (_0x590d45, _0x469999) {
+                return _0x590d45 === _0x469999;
+            },
+            'QcRaQ': _0x309015(0x134),
+            'eJEKW': _0x309015(0x135),
+            'aXwSA': function (_0x3a9999, _0x549999) {
+                return _0x3a9999['addEventListener'](_0x549999);
+            },
+            'wWMyD': _0x309015(0x136),
+            'jVFhV': function (_0x540c45, _0x3a5999) {
+                return _0x540c45['removeEventListener'](_0x3a5999);
+            },
+            'QcRaq': _0x309015(0x134),
+            'OKjKI': _0x309015(0x137),
+            'oZkMT': _0x309015(0x138),
+            'sdiJO': function (_0x469999, _0x35599f) {
+                return _0x469999[_0x309015(0x139)](_0x35599f);
+            },
+            'lVbVU': _0x309015(0x13d),
+            'gWJID': function (_0x469999, _0x35599f) {
+                return _0x469999[_0x309015(0x139)](_0x35599f);
+            },
+            'zQGvW': _0x309015(0x13e),
+            'OHWMq': function (_0x469999, _0x35599f) {
+                return _0x469999[_0x309015(0x139)](_0x35599f);
+            },
+            'zQGvw': _0x309015(0x13e),
+            'ddAXV': function (_0x469999, _0x35599f) {
+                return _0x469999[_0x309015(0x139)](_0x35599f);
+            },
+            'zQGvWw': _0x309015(0x13e),
+            'zQGvWW': _0x309015(0x13e),
+            'zQGvwww': _0x309015(0x13e),
+            'zQGvvW': _0x309015(0x13e),
+            'zQGvvvW': _0x309015(0x13e),
+            'zQGvvvvW': _0x309015(0x13e),
+            'zQGvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvW': _0x309015(0x13e),
+            'zQGvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
