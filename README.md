@@ -9,18 +9,24 @@ Alow paste for redação parana
 
 ⭐ Crie um favorito no seu navegador:
 
-No Chrome, Firefox ou Edge, pressione Ctrl + Shift + B para abrir a barra de favoritos.
-Clique com o botão direito na barra de favoritos e selecione “Adicionar página” ou “Novo favorito”.
-✂️ Cole o código no campo URL/endereço:
 
-Nomeie o favorito como Allow-Paste.
-No campo URL/endereço, cole o código copiado no passo 1 (começando com javascript:).
-💾 Salve o favorito.
+🚀 Copie todo o código JavaScript dessemcriptado fornecido na resposta anterior. Certifique-se de copiar o código completo, desde (function() { até })();.
+Abra a Página Web:
 
-🎉 Para usar:
+🚀 Navegue até a página web onde você deseja habilitar a colagem.
+Abra o Console do Navegador:
 
-Entre na plataforma Redação Paraná (na página da redação).
-Clique no favorito Allow-Paste na barra de favoritos.
+🚀 Aperte F12 no seu teclado. Isso deve abrir as Ferramentas de Desenvolvedor do navegador.
+Alternativamente, você pode clicar com o botão direito na página, selecionar "Inspecionar" (ou similar, dependendo do navegador), e então selecionar a aba "Console".
+Cole o Código no Console:
+
+🚀 Na aba "Console", cole o código JavaScript que você copiou no passo 1.
+Execute o Código:
+
+🚀 Aperte a tecla Enter. O código será executado imediatamente.
+Utilize a Interface:
+
+🚀 Uma interface flutuante deve aparecer na tela. Marque a caixa de seleção "Desbloquear colagem (1ms)" para ativar a colagem.
 Pronto! Agora você poderá colar textos normalmente. ✨
 
 📜 Termo de Uso / Aviso Legal
