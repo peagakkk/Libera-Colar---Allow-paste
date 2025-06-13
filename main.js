@@ -1,1 +1,244 @@
-javascript:(()=>{const _0x1=['style','textContent','appendChild','head','createElement','style','@keyframes rgb-glow{0%,100%{border-color:#f00;box-shadow:0 0 5px #f00;color:#f00;}33%{border-color:#0f0;box-shadow:0 0 5px #0f0;color:#0f0;}66%{border-color:#00f;box-shadow:0 0 5px #00f;color:#00f;}}.allow-paste-container{position:fixed;top:30px;left:30px;padding:12px 18px;background-color:#111;color:#fff;border:2px solid #444;z-index:9999999;font-family:monospace;font-size:13px;border-radius:6px;box-shadow:0 0 10px rgba(0,0,0,0.5);cursor:move;user-select:none;max-width:90%;min-width:180px;}.allow-paste-container h2{margin:0 0 10px 0;font-size:16px;pointer-events:none;}.allow-paste-checkbox{display:inline-block;width:20px;height:20px;border:2px solid #aaa;border-radius:4px;vertical-align:middle;margin-right:8px;cursor:pointer;animation:rgb-glow 3s infinite;}.allow-paste-checkbox.checked{background-color:lime;}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background-color:rgba(0,0,0,0.8);color:#fff;padding:10px 20px;border-radius:6px;font-family:monospace;font-size:14px;z-index:10000000;opacity:0;animation:fadeInOut 3s ease-in-out;}@keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(20px);}10%,90%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(20px);}}.ig-link{margin-top:12px;font-size:13px;color:#ccc;text-align:center;cursor:pointer;text-decoration:underline;animation:rgb-glow 3s infinite;user-select:none;}.ig-link:hover{color:#fff;}.close-btn{position:absolute;top:6px;right:6px;color:#ccc;font-weight:bold;font-size:18px;cursor:pointer;user-select:none;padding:0 6px;line-height:1;border-radius:4px;transition:color 0.3s ease;}.close-btn:hover{color:#fff;background-color:#444;}.show-menu-btn{position:fixed;top:30px;left:30px;background-color:#111;color:#ccc;font-family:monospace;font-size:16px;padding:8px 12px;border:2px solid #444;border-radius:6px;box-shadow:0 0 8px rgba(0,0,0,0.5);cursor:pointer;z-index:99999999;user-select:none;display:none;transition:background-color 0.3s ease;}.show-menu-btn:hover{background-color:#222;color:#fff;}','body','div','innerHTML','closeBtn','Fechar menu','✖','h2','Allow Paste','allowPasteCheckbox','checked','label','Ativar Colar','igLink','@peagakkjk','Mostrar Menu','click','window','open','https://instagram.com/peagakkjk','_blank','none','block','mousedown','mousemove','mouseup','touchstart','touchmove','touchend','touchcancel','stopImmediatePropagation','preventDefault','clipboardData','getData','text','focus','selectionStart','selectionEnd','setRangeText','InputEvent','input','bubbles','cancelable','data','inputType','insertText','addEventListener','classList','toggle','contains','console','error','log'];(function(_0x21cc3a,_0x2c41f1){const _0x3a0a0f=function(_0x32000d){while(--_0x32000d){_0x21cc3a['push'](_0x21cc3a['shift']());}};_0x3a0a0f(++_0x2c41f1);}(_0x1,0x117));const _0x5f2f=function(_0x20b44b,_0x2ac477){_0x20b44b=_0x20b44b-0x0;let _0x44db5e=_0x1[_0x20b44b];return _0x44db5e;};const s=document[_0x5f2f('0x4')](_0x5f2f('0x0'));s[_0x5f2f('0x1')]=_0x5f2f('0x2');document[_0x5f2f('0x3')][_0x5f2f('0x5')](s);const c=document[_0x5f2f('0x4')](_0x5f2f('0x6'));c['className']=_0x5f2f('0x7');c[_0x5f2f('0x8')]=`<div class="${_0x5f2f('0x9')}" id="${_0x5f2f('0xa')}" title="${_0x5f2f('0xb')}">${_0x5f2f('0xc')}</div><h2>${_0x5f2f('0xd')}</h2><div class="${_0x5f2f('0xe')}" id="${_0x5f2f('0xf')}"></div><label for="${_0x5f2f('0xf')}">${_0x5f2f('0x10')}</label><div class="${_0x5f2f('0x11')}" id="${_0x5f2f('0x12')}">${_0x5f2f('0x13')}</div>`;document[_0x5f2f('0x14')][_0x5f2f('0x5')](c);const b=document[_0x5f2f('0x4')](_0x5f2f('0x6'));b['className']=_0x5f2f('0x15');b[_0x5f2f('0x16')]=_0x5f2f('0x17');document[_0x5f2f('0x14')][_0x5f2f('0x5')](b);document[_0x5f2f('0x14')][_0x5f2f('0x18')](_0x5f2f('0x12'))[_0x5f2f('0x19')]=()=>{window[_0x5f2f('0x1a')][_0x5f2f('0x1b')](_0x5f2f('0x1c'),_0x5f2f('0x1d'));};document[_0x5f2f('0x14')][_0x5f2f('0x18')](_0x5f2f('0xa'))[_0x5f2f('0x19')]=()=>{c['style']['display']=_0x5f2f('0x1e');b['style']['display']=_0x5f2f('0x1f');};b[_0x5f2f('0x19')]=()=>{c['style']['display']=_0x5f2f('0x1f');b['style']['display']=_0x5f2f('0x1e');};(()=>{let _0x39ca0a=![],_0x22a1f8=0,_0x1f06d9=0,_0x13b2d8=0,_0x2c2b5c=0;const _0x50c682=(_0x10ed1d,_0x1e9780)=>{_0x39ca0a=!![];const _0x2c1383=c['getBoundingClientRect']();_0x22a1f8=_0x10ed1d;_0x1f06d9=_0x1e9780;_0x13b2d8=_0x2c1383['left'];_0x2c2b5c=_0x2c1383['top'];},_0x1cc5e9=(_0x1ed167,_0x3ed9ed)=>{if(!_0x39ca0a)return;c['style']['left']=_0x13b2d8+_0x1ed167-_0x22a1f8+'px';c['style']['top']=_0x2c2b5c+_0x3ed9ed-_0x1f06d9+'px';c['style']['right']='auto';},_0x55929c=()=>_0x39ca0a=![];c[_0x5f2f('0x20')](_0x5f2f('0x21'),_0x27d4e9=>{if(_0x27d4e9['target']['tagName']==='INPUT'||_0x27d4e9['target']['className']['includes'](_0x5f2f('0x11'))||_0x27d4e9['target']['className']['includes'](_0x5f2f('0x9')))return;_0x50c682(_0x27d4e9['clientX'],_0x27d4e9['clientY']);});document[_0x5f2f('0x20')](_0x5f2f('0x22'),_0x4b6a96=>_0x1cc5e9(_0x4b6a96['clientX'],_0x4b6a96['clientY']));document[_0x5f2f('0x20')](_0x5f2f('0x23'),_0x55929c);c[_0x5f2f('0x20')](_0x5f2f('0x24'),_0x1ee64c=>{if(_0x1ee64c['target']['tagName']==='INPUT'||_0x1ee64c['target']['className']['includes'](_0x5f2f('0x11'))||_0x1ee64c['target']['className']['includes'](_0x5f2f('0x9')))return;_0x50c682(_0x1ee64c['touches'][0]['clientX'],_0x1ee64c['touches'][0]['clientY']);},{'passive':![]});document[_0x5f2f('0x20')](_0x5f2f('0x25'),_0x277b54=>_0x1cc5e9(_0x277b54['touches'][0]['clientX'],_0x277b54['touches'][0]['clientY']),{'passive':![]});document[_0x5f2f('0x20')](_0x5f2f('0x26'),_0x55929c);document[_0x5f2f('0x20')](_0x5f2f('0x27'),_0x55929c);})();const t=m=>{const e=document[_0x5f2f('0x14')](_0x5f2f('0x28'));e['className']=_0x5f2f('0x29');e[_0x5f2f('0x2a')]=m;document[_0x5f2f('0x14')][_0x5f2f('0x5')](e);setTimeout(()=>{e['remove']();},0xbb8);};const p=()=>{try{const i=[...document[_0x5f2f('0x14')]('input'),...document[_0x5f2f('0x14')]('textarea')];i['forEach'](i=>{i['onpaste']=e=>{e[_0x5f2f('0x2b')]();e[_0x5f2f('0x2c')]();const t=(e[_0x5f2f('0x2d')]||window[_0x5f2f('0x2d')])[_0x5f2f('0x2e')](_0x5f2f('0x2f'));if(!t)return;i['focus']();let n=0;const r=setInterval(()=>{if(n>=t['length'])return clearInterval(r);const a=t[n++],o=i['selectionStart'],l=i['selectionEnd'];i['setRangeText'](a,o,l,'end');const s=new InputEvent(_0x5f2f('0x30'),{bubbles:!![],cancelable:!![],data:a,inputType:_0x5f2f('0x31')});i['dispatchEvent'](s);},0x1);};i['onbeforepaste']=null;});t(_0x5f2f('0x32'));}catch(e){console[_0x5f2f('0x33')](_0x5f2f('0x34'),e);t(_0x5f2f('0x35'));}};document[_0x5f2f('0x14')](_0x5f2f('0xf'))[_0x5f2f('0x20')](_0x5f2f('0x19'),()=>{const e=document[_0x5f2f('0x14')](_0x5f2f('0xf'));e[_0x5f2f('0x36')][_0x5f2f('0x37')](_0x5f2f('0x38'));e[_0x5f2f('0x36')][_0x5f2f('0x39')](_0x5f2f('0x38'))?p():t(_0x5f2f('0x3a'));});})();
+javascript:(() => {
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes rgb-glow {
+      0%, 100% { border-color: #f00; box-shadow: 0 0 5px #f00; color: #f00; }
+      33% { border-color: #0f0; box-shadow: 0 0 5px #0f0; color: #0f0; }
+      66% { border-color: #00f; box-shadow: 0 0 5px #00f; color: #00f; }
+    }
+    .allow-paste-container {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      padding: 12px 18px;
+      background-color: #111;
+      color: white;
+      border: 2px solid #444;
+      z-index: 9999999;
+      font-family: monospace;
+      font-size: 13px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      cursor: move;
+      user-select: none;
+      max-width: 90%;
+      min-width: 180px;
+    }
+    .allow-paste-container h2 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      pointer-events: none;
+    }
+    .allow-paste-checkbox {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #aaa;
+      border-radius: 4px;
+      vertical-align: middle;
+      margin-right: 8px;
+      cursor: pointer;
+      animation: rgb-glow 3s infinite;
+    }
+    .allow-paste-checkbox.checked {
+      background-color: lime;
+    }
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 14px;
+      z-index: 10000000;
+      opacity: 0;
+      animation: fadeInOut 3s ease-in-out;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      10%, 90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
+    .ig-link {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #ccc;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: underline;
+      animation: rgb-glow 3s infinite;
+      user-select: none;
+    }
+    .ig-link:hover {
+      color: #fff;
+    }
+    .close-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      color: #ccc;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      padding: 0 6px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover {
+      color: #fff;
+      background-color: #444;
+    }
+    .show-menu-btn {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      background-color: #111;
+      color: #ccc;
+      font-family: monospace;
+      font-size: 16px;
+      padding: 8px 12px;
+      border: 2px solid #444;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.62);
+      cursor: pointer;
+      z-index: 99999999;
+      user-select: none;
+      display: none;
+      transition: background-color 0.3s ease;
+    }
+    .show-menu-btn:hover {
+      background-color: #222;
+      color: white;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Container principal do menu
+  const container = document.createElement("div");
+  container.className = "allow-paste-container";
+  container.innerHTML = `
+    <div class="close-btn" id="closeBtn" title="Fechar menu">✖</div>
+    <h2>Fucker Plataform 1.0 </h2>
+    <div class="allow-paste-checkbox" id="allowPasteCheckbox"></div>
+    <label for="allowPasteCheckbox">Ativar Colar</label>
+    <div class="ig-link" id="igLink">@peagakkjk</div>
+  `;
+  document.body.appendChild(container);
+
+  // Botão para mostrar menu depois de fechado
+  const showMenuBtn = document.createElement("div");
+  showMenuBtn.className = "show-menu-btn";
+  showMenuBtn.textContent = "Mostrar Menu";
+  document.body.appendChild(showMenuBtn);
+
+  // Abrir Instagram
+  document.getElementById("igLink").onclick = () => {
+    window.open("https://instagram.com/peagakkjk", "_blank");
+  };
+
+  // Fechar menu
+  const closeBtn = document.getElementById("closeBtn");
+  closeBtn.onclick = () => {
+    container.style.display = "none";
+    showMenuBtn.style.display = "block";
+  };
+
+  // Mostrar menu
+  showMenuBtn.onclick = () => {
+    container.style.display = "block";
+    showMenuBtn.style.display = "none";
+  };
+
+  // Dragging (mouse + touch)
+  (() => {
+    let isDragging = false;
+    let startX = 0, startY = 0, origX = 0, origY = 0;
+    const startDrag = (x, y) => {
+      isDragging = true;
+      const rect = container.getBoundingClientRect();
+      startX = x;
+      startY = y;
+      origX = rect.left;
+      origY = rect.top;
+    };
+    const moveDrag = (x, y) => {
+      if (!isDragging) return;
+      container.style.left = `${origX + x - startX}px`;
+      container.style.top = `${origY + y - startY}px`;
+      container.style.right = "auto";
+    };
+    const stopDrag = () => isDragging = false;
+
+    container.addEventListener("mousedown", e => {
+      if (e.target.tagName === "INPUT" || e.target.className.includes("ig-link") || e.target.className.includes("close-btn")) return;
+      startDrag(e.clientX, e.clientY);
+    });
+    document.addEventListener("mousemove", e => moveDrag(e.clientX, e.clientY));
+    document.addEventListener("mouseup", stopDrag);
+
+    container.addEventListener("touchstart", e => {
+      if (e.target.tagName === "INPUT" || e.target.className.includes("ig-link") || e.target.className.includes("close-btn")) return;
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    document.addEventListener("touchmove", e => moveDrag(e.touches[0].clientX, e.touches[0].clientY), { passive: false });
+    document.addEventListener("touchend", stopDrag);
+    document.addEventListener("touchcancel", stopDrag);
+  })();
+
+  // Toast de mensagem
+  const showToast = msg => {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  };
+
+  // Função para ativar "colar"
+  const allowPaste = () => {
+    try {
+      const inputs = [...document.querySelectorAll("input"), ...document.querySelectorAll("textarea")];
+      inputs.forEach(input => {
+        input.onpaste = e => {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          const txt = (e.clipboardData || window.clipboardData).getData("text");
+          if (!txt) return;
+          input.focus();
+          let i = 0;
+          const interval = setInterval(() => {
+            if (i >= txt.length) return clearInterval(interval);
+            const char = txt[i++];
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            input.setRangeText(char, start, end, 'end');
+            const event = new InputEvent("input", {
+              bubbles: true,
+              cancelable: true,
+              data: char,
+              inputType: "insertText"
+            });
+            input.dispatchEvent(event);
+          }, 1);
+        };
+        input.onbeforepaste = null;
+      });
+      showToast("Colar ativado!");
+    } catch (err) {
+      console.error("Paste Error:", err);
+      showToast("Erro ao ativar colar!.");
+    }
+  };
+
+  const checkbox = document.getElementById("allowPasteCheckbox");
+  checkbox.addEventListener("click", () => {
+    checkbox.classList.toggle("checked");
+    checkbox.classList.contains("checked") ? allowPaste() : showToast("Colar desativado✖️.");
+  });
+})();
