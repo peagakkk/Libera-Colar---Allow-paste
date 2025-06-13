@@ -21,6 +21,7 @@ javascript:(() => {
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       cursor: move;
       user-select: none;
+      max-width: 90%;
     }
     .allow-paste-container h2 {
       margin: 0 0 10px 0;
@@ -60,43 +61,65 @@ javascript:(() => {
       0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
       10%, 90% { opacity: 1; transform: translateX(-50%) translateY(0); }
       100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
+    .ig-link {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #ccc;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .ig-link:hover {
+      color: #fff;
     }`;
   document.head.appendChild(style);
 
   const container = document.createElement("div");
   container.className = "allow-paste-container";
-  container.innerHTML = `<h2>Allow Paste – Corrigido</h2><div class="allow-paste-checkbox" id="allowPasteCheckbox"></div><label for="allowPasteCheckbox">Enable Paste</label>`;
+  container.innerHTML = `
+    <h2>Allow Paste</h2>
+    <div class="allow-paste-checkbox" id="allowPasteCheckbox"></div>
+    <label for="allowPasteCheckbox">Ativar Colar</label>
+    <div class="ig-link" id="igLink">@peagakkjk</div>`;
   document.body.appendChild(container);
 
-  // DRAG FIX
+  // Instagram Link Click
+  document.getElementById("igLink").onclick = () => {
+    window.open("https://instagram.com/peagakkjk", "_blank");
+  };
+
+  // Dragging (mouse + touch)
   (() => {
     let isDragging = false;
-    let startX = 0, startY = 0;
-    let origX = 0, origY = 0;
-
-    container.addEventListener("mousedown", e => {
-      if (e.target.closest("input") || e.target.tagName === "LABEL") return; // não interfere com inputs
+    let startX = 0, startY = 0, origX = 0, origY = 0;
+    const startDrag = (x, y) => {
       isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
       const rect = container.getBoundingClientRect();
+      startX = x;
+      startY = y;
       origX = rect.left;
       origY = rect.top;
-      e.preventDefault();
-    });
-
-    document.addEventListener("mousemove", e => {
+    };
+    const moveDrag = (x, y) => {
       if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      container.style.left = `${origX + dx}px`;
-      container.style.top = `${origY + dy}px`;
-      container.style.right = "auto"; // impede conflito com posição inicial
-    });
+      container.style.left = `${origX + x - startX}px`;
+      container.style.top = `${origY + y - startY}px`;
+      container.style.right = "auto";
+    };
+    const stopDrag = () => isDragging = false;
 
-    document.addEventListener("mouseup", () => {
-      isDragging = false;
+    container.addEventListener("mousedown", e => {
+      if (e.target.tagName === "INPUT" || e.target.className.includes("ig-link")) return;
+      startDrag(e.clientX, e.clientY);
     });
+    document.addEventListener("mousemove", e => moveDrag(e.clientX, e.clientY));
+    document.addEventListener("mouseup", stopDrag);
+
+    container.addEventListener("touchstart", e => startDrag(e.touches[0].clientX, e.touches[0].clientY), { passive: false });
+    document.addEventListener("touchmove", e => moveDrag(e.touches[0].clientX, e.touches[0].clientY), { passive: false });
+    document.addEventListener("touchend", stopDrag);
+    document.addEventListener("touchcancel", stopDrag);
   })();
 
   const showToast = msg => {
@@ -131,20 +154,20 @@ javascript:(() => {
               inputType: "insertText"
             });
             input.dispatchEvent(event);
-          }, 1); // 1ms por caractere
+          }, 1);
         };
         input.onbeforepaste = null;
       });
-      showToast("Paste corrigido e ativado!");
+      showToast("Colar ativado!");
     } catch (err) {
       console.error("Paste Error:", err);
-      showToast("Erro ao corrigir paste.");
+      showToast("Erro ao ativar colar.");
     }
   };
 
   const checkbox = document.getElementById("allowPasteCheckbox");
   checkbox.addEventListener("click", () => {
     checkbox.classList.toggle("checked");
-    checkbox.classList.contains("checked") ? allowPaste() : showToast("Paste desativado!");
+    checkbox.classList.contains("checked") ? allowPaste() : showToast("Colar desativado.");
   });
 })();
