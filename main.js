@@ -105,7 +105,7 @@ javascript:(() => {
       padding: 8px 12px;
       border: 2px solid #444;
       border-radius: 6px;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.62);
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
       cursor: pointer;
       z-index: 99999999;
       user-select: none;
@@ -124,7 +124,7 @@ javascript:(() => {
   container.className = "allow-paste-container";
   container.innerHTML = `
     <div class="close-btn" id="closeBtn" title="Fechar menu">✖</div>
-    <h2>Fucker Plataform 1.0 </h2>
+    <h2>Allow Paste</h2>
     <div class="allow-paste-checkbox" id="allowPasteCheckbox"></div>
     <label for="allowPasteCheckbox">Ativar Colar</label>
     <div class="ig-link" id="igLink">@peagakkjk</div>
@@ -232,13 +232,13 @@ javascript:(() => {
       showToast("Colar ativado!");
     } catch (err) {
       console.error("Paste Error:", err);
-      showToast("Erro ao ativar colar!.");
+      showToast("Erro ao ativar colar.");
     }
   };
 
   const checkbox = document.getElementById("allowPasteCheckbox");
   checkbox.addEventListener("click", () => {
     checkbox.classList.toggle("checked");
-    checkbox.classList.contains("checked") ? allowPaste() : showToast("Colar desativado✖️.");
+    checkbox.classList.contains("checked") ? allowPaste() : showToast("Colar desativado.");
   });
 })();
