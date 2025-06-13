@@ -9,7 +9,7 @@ javascript:(() => {
     .allow-paste-container {
       position: fixed;
       top: 30px;
-      right: 30px;
+      left: 30px;
       padding: 12px 18px;
       background-color: #111;
       color: white;
@@ -20,10 +20,12 @@ javascript:(() => {
       border-radius: 6px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       cursor: move;
+      user-select: none;
     }
     .allow-paste-container h2 {
       margin: 0 0 10px 0;
       font-size: 16px;
+      pointer-events: none;
     }
     .allow-paste-checkbox {
       display: inline-block;
@@ -66,20 +68,35 @@ javascript:(() => {
   container.innerHTML = `<h2>Allow Paste – Corrigido</h2><div class="allow-paste-checkbox" id="allowPasteCheckbox"></div><label for="allowPasteCheckbox">Enable Paste</label>`;
   document.body.appendChild(container);
 
+  // DRAG FIX
   (() => {
-    let drag = false, offsetX = 0, offsetY = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let origX = 0, origY = 0;
+
     container.addEventListener("mousedown", e => {
-      drag = true;
-      offsetX = e.clientX - container.offsetLeft;
-      offsetY = e.clientY - container.offsetTop;
+      if (e.target.closest("input") || e.target.tagName === "LABEL") return; // não interfere com inputs
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      const rect = container.getBoundingClientRect();
+      origX = rect.left;
+      origY = rect.top;
+      e.preventDefault();
     });
+
     document.addEventListener("mousemove", e => {
-      if (drag) {
-        container.style.left = `${e.clientX - offsetX}px`;
-        container.style.top = `${e.clientY - offsetY}px`;
-      }
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      container.style.left = `${origX + dx}px`;
+      container.style.top = `${origY + dy}px`;
+      container.style.right = "auto"; // impede conflito com posição inicial
     });
-    document.addEventListener("mouseup", () => drag = false);
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
   })();
 
   const showToast = msg => {
