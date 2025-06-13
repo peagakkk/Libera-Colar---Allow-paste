@@ -3,7 +3,7 @@
 Alow paste for redação parana 
 
 👑 Fck Plataform
-🚀 Como usar o Allow-Paste Bookmarklet
+🚀 Como usar em Bookmarklet
 1. 📋 **Copie este código:**
 
     ```javascript
