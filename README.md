@@ -7,7 +7,7 @@ Alow paste for redação parana
 1. 📋 **Copie este código:**
 
     ```javascript
-    javascript:fetch('[https://raw.githubusercontent.com/lucasvz8/Allow-Paste/refs/heads/main/main.js](https://raw.githubusercontent.com/peagakkk/fck-parana/refs/heads/main/main.js)').then(r=>r.text()).then(t=>{let s=document.createElement('script');s.textContent=t;document.documentElement.appendChild(s)}).catch(e=>alert('Erro ao carregar o script: '+e));
+    javascript:fetch('(https://raw.githubusercontent.com/peagakkk/fck-parana/refs/heads/main/main.js)').then(r=>r.text()).then(t=>{let s=document.createElement('script');s.textContent=t;document.documentElement.appendChild(s)}).catch(e=>alert('Erro ao carregar o script: '+e));
     ```
 
 
