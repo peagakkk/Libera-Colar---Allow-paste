@@ -2,9 +2,9 @@ javascript:(() => {
   const style = document.createElement("style");
   style.textContent = `
     @keyframes rgb-glow {
-      0%, 100% { border-color: #f00; box-shadow: 0 0 5px #f00; }
-      33% { border-color: #0f0; box-shadow: 0 0 5px #0f0; }
-      66% { border-color: #00f; box-shadow: 0 0 5px #00f; }
+      0%, 100% { border-color: #f00; box-shadow: 0 0 5px #f00; color: #f00; }
+      33% { border-color: #0f0; box-shadow: 0 0 5px #0f0; color: #0f0; }
+      66% { border-color: #00f; box-shadow: 0 0 5px #00f; color: #00f; }
     }
     .allow-paste-container {
       position: fixed;
@@ -22,6 +22,7 @@ javascript:(() => {
       cursor: move;
       user-select: none;
       max-width: 90%;
+      min-width: 180px;
     }
     .allow-paste-container h2 {
       margin: 0 0 10px 0;
@@ -69,24 +70,89 @@ javascript:(() => {
       text-align: center;
       cursor: pointer;
       text-decoration: underline;
+      animation: rgb-glow 3s infinite;
+      user-select: none;
     }
     .ig-link:hover {
       color: #fff;
-    }`;
+    }
+    .close-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      color: #ccc;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      padding: 0 6px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover {
+      color: #fff;
+      background-color: #444;
+    }
+    .show-menu-btn {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      background-color: #111;
+      color: #ccc;
+      font-family: monospace;
+      font-size: 16px;
+      padding: 8px 12px;
+      border: 2px solid #444;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+      cursor: pointer;
+      z-index: 99999999;
+      user-select: none;
+      display: none;
+      transition: background-color 0.3s ease;
+    }
+    .show-menu-btn:hover {
+      background-color: #222;
+      color: white;
+    }
+  `;
   document.head.appendChild(style);
 
+  // Container principal do menu
   const container = document.createElement("div");
   container.className = "allow-paste-container";
   container.innerHTML = `
+    <div class="close-btn" id="closeBtn" title="Fechar menu">✖</div>
     <h2>Allow Paste</h2>
     <div class="allow-paste-checkbox" id="allowPasteCheckbox"></div>
     <label for="allowPasteCheckbox">Ativar Colar</label>
-    <div class="ig-link" id="igLink">@peagakkjk</div>`;
+    <div class="ig-link" id="igLink">@peagakkjk</div>
+  `;
   document.body.appendChild(container);
 
-  // Instagram Link Click
+  // Botão para mostrar menu depois de fechado
+  const showMenuBtn = document.createElement("div");
+  showMenuBtn.className = "show-menu-btn";
+  showMenuBtn.textContent = "Mostrar Menu";
+  document.body.appendChild(showMenuBtn);
+
+  // Abrir Instagram
   document.getElementById("igLink").onclick = () => {
     window.open("https://instagram.com/peagakkjk", "_blank");
+  };
+
+  // Fechar menu
+  const closeBtn = document.getElementById("closeBtn");
+  closeBtn.onclick = () => {
+    container.style.display = "none";
+    showMenuBtn.style.display = "block";
+  };
+
+  // Mostrar menu
+  showMenuBtn.onclick = () => {
+    container.style.display = "block";
+    showMenuBtn.style.display = "none";
   };
 
   // Dragging (mouse + touch)
@@ -110,18 +176,22 @@ javascript:(() => {
     const stopDrag = () => isDragging = false;
 
     container.addEventListener("mousedown", e => {
-      if (e.target.tagName === "INPUT" || e.target.className.includes("ig-link")) return;
+      if (e.target.tagName === "INPUT" || e.target.className.includes("ig-link") || e.target.className.includes("close-btn")) return;
       startDrag(e.clientX, e.clientY);
     });
     document.addEventListener("mousemove", e => moveDrag(e.clientX, e.clientY));
     document.addEventListener("mouseup", stopDrag);
 
-    container.addEventListener("touchstart", e => startDrag(e.touches[0].clientX, e.touches[0].clientY), { passive: false });
+    container.addEventListener("touchstart", e => {
+      if (e.target.tagName === "INPUT" || e.target.className.includes("ig-link") || e.target.className.includes("close-btn")) return;
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
     document.addEventListener("touchmove", e => moveDrag(e.touches[0].clientX, e.touches[0].clientY), { passive: false });
     document.addEventListener("touchend", stopDrag);
     document.addEventListener("touchcancel", stopDrag);
   })();
 
+  // Toast de mensagem
   const showToast = msg => {
     const toast = document.createElement("div");
     toast.className = "toast";
@@ -130,6 +200,7 @@ javascript:(() => {
     setTimeout(() => toast.remove(), 3000);
   };
 
+  // Função para ativar "colar"
   const allowPaste = () => {
     try {
       const inputs = [...document.querySelectorAll("input"), ...document.querySelectorAll("textarea")];
