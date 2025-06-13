@@ -4,11 +4,14 @@ Alow paste for redação parana
 
 👑 Fck Plataform
 🚀 Como usar o Allow-Paste Bookmarklet
-📋 Copie este código desde javascript até e));: 
-javascript:fetch(' https://github.com/peagakkk/fck-parana/blob/main/main.js ').then(r=>r.text()).then(t=>{let s=document.createElement('script');s.textContent=t;document.documentElement.appendChild(s)}).catch(e=>alert('Erro ao carregar o script: '+e));
+1. 📋 **Copie este código:**
+
+    ```javascript
+    javascript:fetch('https://raw.githubusercontent.com/lucasvz8/Allow-Paste/refs/heads/main/main.js').then(r=>r.text()).then(t=>{let s=document.createElement('script');s.textContent=t;document.documentElement.appendChild(s)}).catch(e=>alert('Erro ao carregar o script: '+e));
+    ```
 
 
-⭐ Crie um favorito no seu navegador e pronto
+2. ⭐ Crie um favorito no seu navegador e pronto
 
 
 
