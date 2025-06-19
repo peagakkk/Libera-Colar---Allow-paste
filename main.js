@@ -92,13 +92,14 @@ javascript:(() => {
         height: 60px; border-bottom: 1px solid #333; display: flex; align-items: center;
         justify-content: space-between; padding: 0 16px; font-weight: 600;
         font-size: 16px; user-select: none; border-radius: 9px 9px 0 0;
-        cursor: move; color: white;
+        cursor: move; color: white; justify-content:center;
       }
       #topbarCloseBtn {
         background: #e03e3e; border: none; border-radius: 3px; width: 28px; height: 28px;
         color: white; font-weight: 700; font-size: 20px; cursor: pointer;
         display: flex; align-items: center; justify-content: center; user-select: none;
         transition: background-color 0.3s ease;
+        position:absolute; right:10px; top:15px;
       }
       #topbarCloseBtn:hover { background-color: #b22e2e; }
       #content {
@@ -117,43 +118,38 @@ javascript:(() => {
         text-align: center; width: 100%;
       }
       #authorLink:hover { color: rgb(102, 113, 184); }
-      #clockedate { font-weight: 600; font-size: 14px; }
     `;
     document.head.appendChild(style);
   }
-  function pasteCleanText(inputElem, text) {
+  async function pasteCleanText(inputElem, text) {
     inputElem.focus();
     const tag = inputElem.tagName.toLowerCase();
     const proto = tag === "textarea" ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
     const setter = Object.getOwnPropertyDescriptor(proto, "value").set;
     setter.call(inputElem, "");
-    (async () => {
-      let accumulated = "";
-      for (const ch of text) {
-        accumulated += ch;
-        setter.call(inputElem, accumulated);
-        inputElem.dispatchEvent(new InputEvent("input", { data: ch, bubbles: true, inputType: "insertText" }));
-        await new Promise(r => setTimeout(r, 1));
-      }
-      inputElem.dispatchEvent(new Event("change", { bubbles: true }));
-      sendToast("✅ Texto Colado.", "success");
-    })();
+    // Simula digitação lenta e aleatória para parecer humana
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      setter.call(inputElem, inputElem.value + ch);
+      inputElem.dispatchEvent(new InputEvent("input", { data: ch, bubbles: true, inputType: "insertText" }));
+      await new Promise(r => setTimeout(r, 10 + Math.random() * 80)); // intervalo entre 10ms e 90ms
+    }
+    inputElem.dispatchEvent(new Event("change", { bubbles: true }));
+    sendToast("✅ Texto Colado.", "success");
   }
   function createMenu() {
     if(document.getElementById("allow-paste-menu")) return document.getElementById("allow-paste-menu");
     const menu = document.createElement("div");
     menu.id = "allow-paste-menu";
     menu.innerHTML = `
-      <div id="topbar">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span id="clockedate"></span>
-        </div>
+      <div id="topbar" title="@peagakkk-github">
+        <span>@peagakkk-github</span>
         <button id="topbarCloseBtn" title="Fechar">×</button>
       </div>
       <div id="content">
         <label for="unlockPaste">
           <input type="checkbox" id="unlockPaste" />
-          Desbloquear colagem (1ms)
+          Desbloquear colagem (simula digitação)
         </label>
         <small style="font-size: 10px; opacity: 0.8;">
           ! Ao colar, todo o texto anterior será <span style="color: red; text-shadow: 0 0 2px red, 0 0 4px red;">limpado.</span>
@@ -283,14 +279,4 @@ javascript:(() => {
   const menu = createMenu();
   setupPasteUnlock(menu);
   setupDarkModeToggle(menu);
-  // Atualiza data e hora a cada segundo
-  const clockEl = menu.querySelector("#clockedate");
-  function updateClock() {
-    const now = new Date();
-    const optionsDate = { weekday: "long", day: "2-digit", month: "long", year: "numeric" };
-    const optionsTime = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "America/Sao_Paulo" };
-    clockEl.innerText = now.toLocaleDateString("pt-BR", optionsDate) + " " + now.toLocaleTimeString("pt-BR", optionsTime);
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
 })();
