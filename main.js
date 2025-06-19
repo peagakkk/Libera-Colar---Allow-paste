@@ -1,5 +1,5 @@
 (() => {
-  // Importa DarkReader se não estiver presente
+  // 1) Importar DarkReader se necessário
   function loadDarkReader() {
     return new Promise((resolve, reject) => {
       if (typeof DarkReader !== "undefined") return resolve();
@@ -11,111 +11,345 @@
     });
   }
 
-  // Cria toast simples
-  function sendToast(msg, duration = 3000) {
-    const toast = document.createElement("div");
-    toast.textContent = msg;
-    toast.style.cssText = `
+  // 2) Toast simples para mensagens
+  const toastContainerId = "global-toast-container";
+  let toastContainer = document.getElementById(toastContainerId);
+  if (!toastContainer) {
+    toastContainer = document.createElement("div");
+    toastContainer.id = toastContainerId;
+    toastContainer.style.cssText = `
       position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0,0,0,0.75);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-family: monospace;
-      font-size: 14px;
-      z-index: 99999999;
-      opacity: 1;
-      transition: opacity 0.5s ease;
+      top: 20px;
+      right: 20px;
+      z-index: 999999999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: 'Roboto Mono', monospace;
     `;
-    document.body.appendChild(toast);
+    document.body.appendChild(toastContainer);
+  }
+
+  function sendToast(message, type = "default", duration = 3000) {
+    const toast = document.createElement("div");
+    const colors = {
+      error: "#b92e2e",
+      success: "#00FA9A",
+      warn: "#FFA500",
+      info: "#00BFFF",
+      default: "#333"
+    };
+    toast.style.cssText = `
+      background: ${colors[type] || colors.default};
+      color: white;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease, fadeOut 0.3s ease ${duration / 1000 - 0.3}s;
+      min-width: 280px;
+      max-width: 380px;
+      user-select:none;
+    `;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
     setTimeout(() => {
-      toast.style.opacity = "0";
-      setTimeout(() => toast.remove(), 500);
+      toast.remove();
     }, duration);
   }
 
-  // Cria o menu com toggle de Dark Mode
-  function createMenu() {
-    // Adiciona estilo básico
+  // 3) Estilos principais do menu + animações + checkbox glow + dark mode toggle
+  const styleId = "allow-paste-style";
+  if (!document.getElementById(styleId)) {
     const style = document.createElement("style");
+    style.id = styleId;
     style.textContent = `
-      #myMenu {
-        position: fixed;
-        top: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #121212;
-        color: white;
-        font-family: monospace;
-        padding: 16px 24px;
-        border-radius: 12px;
-        box-shadow: 0 0 15px #ff3cac;
-        z-index: 99999999;
-        user-select: none;
-        width: 280px;
+      @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(-10px);}
+        to {opacity: 1; transform: translateY(0);}
       }
-      #myMenu label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+      @keyframes fadeOut {
+        from {opacity: 1; transform: translateY(0);}
+        to {opacity: 0; transform: translateY(-10px);}
+      }
+      @keyframes rgbGlow {
+        0%, 100% {
+          color: #ff3cac;
+          text-shadow: 0 0 2px #ff3cac, 0 0 4px #ff3cac;
+        }
+        33% {
+          color: #00fff7;
+          text-shadow: 0 0 2px #00fff7, 0 0 4px #00fff7;
+        }
+        66% {
+          color: #f9f586;
+          text-shadow: 0 0 2px #f9f586, 0 0 4px #f9f586;
+        }
+      }
+      @keyframes borderGlow {
+        0%, 100% {
+          border-color: #ff3cac;
+          box-shadow: 0 0 8px #ff3cac, 0 0 16px #ff3cac;
+        }
+        33% {
+          border-color: #00fff7;
+          box-shadow: 0 0 8px #00fff7, 0 0 16px #00fff7;
+        }
+        66% {
+          border-color: #f9f586;
+          box-shadow: 0 0 8px #f9f586, 0 0 16px #f9f586;
+        }
+      }
+      label[for="unlockPaste"], label[for="darkModeCheck"] {
         cursor: pointer;
-        font-weight: 600;
+        user-select:none;
       }
-      #myMenu input[type="checkbox"] {
+      input[type="checkbox"] {
         width: 20px;
         height: 20px;
         cursor: pointer;
-        border-radius: 4px;
-        border: 2px solid #ff3cac;
+        border-radius: 3px;
         appearance: none;
-        background-color: #222;
+        background-color: #1e1e1e;
+        border: 2px solid #ff3cac;
+        display: grid;
+        place-content: center;
+        transition: box-shadow 0.25s ease, border-color 5s linear;
+        outline: none;
+        animation: rgbGlowBorder 5s linear infinite;
         position: relative;
-        transition: background-color 0.3s ease;
       }
-      #myMenu input[type="checkbox"]:checked {
+      @keyframes rgbGlowBorder {
+        0%, 100% {
+          border-color: #ff3cac;
+          box-shadow: 0 0 6px #ff3cac, 0 0 12px #ff3cac;
+        }
+        33% {
+          border-color: #00fff7;
+          box-shadow: 0 0 6px #00fff7, 0 0 12px #00fff7;
+        }
+        66% {
+          border-color: #f9f586;
+          box-shadow: 0 0 6px #f9f586, 0 0 12px #f9f586;
+        }
+      }
+      input[type="checkbox"]::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
         background-color: #ff3cac;
-      }
-      #myMenu input[type="checkbox"]:checked::after {
-        content: "✔";
-        color: white;
+        transform: scale(0);
+        transition: transform 0.2s ease-in-out, background-color 5s linear;
+        animation: rgbGlowBg 5s linear infinite;
         position: absolute;
-        top: 1px;
+        top: 4px;
         left: 4px;
-        font-size: 16px;
       }
-      #myMenu #closeBtn {
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        cursor: pointer;
+      @keyframes rgbGlowBg {
+        0%, 100% {
+          background-color: #ff3cac;
+        }
+        33% {
+          background-color: #00fff7;
+        }
+        66% {
+          background-color: #f9f586;
+        }
+      }
+      input[type="checkbox"]:checked::before {
+        transform: scale(1);
+      }
+      #allow-paste-menu {
+        opacity: 0.9;
+        transition: opacity 0.4s ease-in-out;
+        user-select:none;
+        width: 360px;
+        background: #121212;
+        color: white;
+        font-family: 'Roboto Mono', monospace;
+        border-radius: 12px;
+        border: 3px solid #ff3cac;
+        box-shadow: 0 0 8px #ff3cac88, 0 0 16px #ff3cac88;
+        animation: borderGlow 5s linear infinite;
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        z-index: 999999999;
+      }
+      #allow-paste-menu:hover {
+        opacity: 1;
+      }
+      #topbar {
+        background: linear-gradient(90deg, rgba(5,5,10,1) 0%, rgba(48,49,53,1) 100%);
+        height: 60px;
+        border-bottom: 1px solid #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        font-weight: 600;
+        font-size: 16px;
+        user-select: none;
+        border-radius: 9px 9px 0 0;
+        cursor: move;
+        color: white;
+      }
+      #topbarCloseBtn {
+        background: #e03e3e;
+        border: none;
+        border-radius: 3px;
+        width: 28px;
+        height: 28px;
+        color: white;
         font-weight: 700;
         font-size: 20px;
-        color: #ff3cac;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        transition: background-color 0.3s ease;
+      }
+      #topbarCloseBtn:hover {
+        background-color: #b22e2e;
+      }
+      #content {
+        flex-grow: 1;
+        padding: 20px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-weight: 600;
+        font-size: 15px;
         user-select: none;
       }
-      #myMenu #closeBtn:hover {
+      #footer {
+        background: #121212;
+        height: 32px;
+        border-top: 1px solid #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 400;
+        border-radius: 0 0 9px 9px;
+        user-select: none;
+        gap: 8px;
+        cursor: move;
+        color: white;
+      }
+      #authorLink {
+        color: #ff3cac;
+        font-weight: 600;
+        text-decoration: underline;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.3s ease;
+        text-align: center;
+        width: 100%;
+      }
+      #authorLink:hover {
         color: #ff71b8;
+      }
+      #clockedate {
+        font-weight: 600;
+        font-size: 14px;
       }
     `;
     document.head.appendChild(style);
+  }
 
-    // Cria container menu
+  // 4) Função para colar texto com limpeza
+  function pasteCleanText(inputElem, text) {
+    inputElem.focus();
+    const tag = inputElem.tagName.toLowerCase();
+    const proto = tag === "textarea" ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
+    const setter = Object.getOwnPropertyDescriptor(proto, "value").set;
+    setter.call(inputElem, "");
+    (async () => {
+      let accumulated = "";
+      for (const ch of text) {
+        accumulated += ch;
+        setter.call(inputElem, accumulated);
+        inputElem.dispatchEvent(new InputEvent("input", {
+          data: ch,
+          bubbles: true,
+          inputType: "insertText"
+        }));
+        await new Promise(r => setTimeout(r, 1));
+      }
+      inputElem.dispatchEvent(new Event("change", { bubbles: true }));
+      sendToast("✅ Texto Colado.", "success");
+    })();
+  }
+
+  // 5) Cria o menu com todos elementos: allow paste + dark mode + autor
+  function createMenu() {
     const menu = document.createElement("div");
-    menu.id = "myMenu";
+    menu.id = "allow-paste-menu";
     menu.innerHTML = `
-      <div id="closeBtn" title="Fechar Menu">×</div>
-      <label for="darkModeCheck">
-        <input type="checkbox" id="darkModeCheck" />
-        Ativar Modo Escuro
-      </label>
+      <div id="topbar">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span id="clockedate"></span>
+        </div>
+        <button id="topbarCloseBtn" title="Fechar">×</button>
+      </div>
+      <div id="content">
+        <label for="unlockPaste">
+          <input type="checkbox" id="unlockPaste" />
+          Desbloquear colagem (1ms)
+        </label>
+        <small style="font-size: 10px; opacity: 0.8;">
+          ! Ao colar, todo o texto anterior será <span style="color: red; text-shadow: 0 0 2px red, 0 0 4px red;">limpado.</span>
+        </small>
+        <label for="darkModeCheck" style="margin-top: 12px;">
+          <input type="checkbox" id="darkModeCheck" />
+          Ativar Modo Escuro
+        </label>
+        <a id="authorLink" href="https://github.com/seuUsuario" target="_blank" rel="noopener noreferrer">@autor</a>
+      </div>
+      <div id="footer">
+        <span>© 2025</span>
+      </div>
     `;
     document.body.appendChild(menu);
 
-    // Fecha menu
-    document.getElementById("closeBtn").onclick = () => {
+    // Atualiza data/hora no menu
+    const clockElem = menu.querySelector("#clockedate");
+    function updateClock() {
+      const d = new Date();
+      const optionsDate = { weekday: "long", day: "2-digit", month: "long", year: "numeric" };
+      const optionsTime = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "America/Sao_Paulo" };
+      clockElem.textContent = d.toLocaleDateString("pt-BR", optionsDate) + " " + d.toLocaleTimeString("pt-BR", optionsTime);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Drag support for topbar and footer
+    let dragging = false, offsetX = 0, offsetY = 0;
+    function dragStart(e) {
+      dragging = true;
+      offsetX = e.clientX - menu.offsetLeft;
+      offsetY = e.clientY - menu.offsetTop;
+      e.preventDefault();
+    }
+    function dragEnd() { dragging = false; }
+    function dragMove(e) {
+      if (!dragging) return;
+      menu.style.left = (e.clientX - offsetX) + "px";
+      menu.style.top = (e.clientY - offsetY) + "px";
+    }
+    menu.querySelector("#topbar").addEventListener("mousedown", dragStart);
+    menu.querySelector("#footer").addEventListener("mousedown", dragStart);
+    document.addEventListener("mouseup", dragEnd);
+    document.addEventListener("mousemove", dragMove);
+
+    // Close button hides menu
+    menu.querySelector("#topbarCloseBtn").onclick = () => {
       menu.style.display = "none";
       showBtn.style.display = "block";
     };
@@ -125,46 +359,83 @@
     showBtn.textContent = "Mostrar Menu";
     showBtn.style.cssText = `
       position: fixed;
-      top: 50px;
+      top: 100px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 99999999;
+      z-index: 999999999;
       padding: 8px 16px;
       border-radius: 10px;
-      border: 2px solid #ff3cac;
+      border: 3px solid #ff3cac;
       background: #121212;
       color: #ff3cac;
-      font-family: monospace;
+      font-family: 'Roboto Mono', monospace;
       cursor: pointer;
       user-select: none;
-      display: none;
     `;
     document.body.appendChild(showBtn);
     showBtn.onclick = () => {
-      menu.style.display = "block";
+      menu.style.display = "flex";
       showBtn.style.display = "none";
     };
 
     return menu;
   }
 
-  // Função para ativar/desativar dark mode via DarkReader
-  async function setupDarkModeToggle() {
+  // 6) Setup paste unlocking with checkbox toggle
+  function setupPasteUnlock(menu) {
+    let pasteEnabled = false;
+    const inputs = () => Array.from(document.querySelectorAll("textarea, input[type='text'][maxlength]"));
+
+    function pasteHandler(e) {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      pasteCleanText(e.target, text);
+    }
+
+    const checkbox = menu.querySelector("#unlockPaste");
+    checkbox.addEventListener("change", () => {
+      const fields = inputs();
+      if (fields.length === 0) {
+        checkbox.checked = false;
+        sendToast("❌ Nenhum campo de entrada encontrado.", "error");
+        return;
+      }
+
+      if (checkbox.checked && !pasteEnabled) {
+        for (const el of fields) {
+          el.addEventListener("paste", pasteHandler);
+          el.oncontextmenu = null;
+          el.removeAttribute("oncontextmenu");
+          el.addEventListener("contextmenu", e => e.stopPropagation(), true);
+        }
+        pasteEnabled = true;
+        sendToast("✅ Agora você pode colar com Ctrl+V normalmente!", "info");
+      } else if (!checkbox.checked && pasteEnabled) {
+        for (const el of fields) {
+          el.removeEventListener("paste", pasteHandler);
+          el.oncontextmenu = null;
+          el.removeAttribute("oncontextmenu");
+        }
+        pasteEnabled = false;
+        sendToast("❌ Colagem desativada.", "error");
+      }
+    });
+  }
+
+  // 7) Setup dark mode toggle via DarkReader
+  async function setupDarkModeToggle(menu) {
+    const checkbox = menu.querySelector("#darkModeCheck");
     try {
       await loadDarkReader();
-      let darkModeActive = false;
-      const checkbox = document.getElementById("darkModeCheck");
 
       // Ativar dark mode se preferir inicial
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         checkbox.checked = true;
         DarkReader.enable();
-        darkModeActive = true;
       }
 
       checkbox.onchange = () => {
-        darkModeActive = checkbox.checked;
-        if (darkModeActive) {
+        if (checkbox.checked) {
           DarkReader.enable();
           sendToast("🌑 Dark Mode Ativado", 2000);
         } else {
@@ -178,7 +449,21 @@
     }
   }
 
-  // Cria menu e configura toggle
-  const menu = createMenu();
-  setupDarkModeToggle();
+  // 8) Carrega fonte Roboto Mono (se ainda não carregada)
+  function loadFont() {
+    if (!document.getElementById("Roboto-Mono")) {
+      const link = document.createElement("link");
+      link.id = "Roboto-Mono";
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Roboto+Mono";
+      document.head.appendChild(link);
+    }
+  }
+
+  // Iniciar tudo
+  loadFont();
+  styleId && createMenu();
+  const menu = document.getElementById("allow-paste-menu") || createMenu();
+  setupPasteUnlock(menu);
+  setupDarkModeToggle(menu);
 })();
