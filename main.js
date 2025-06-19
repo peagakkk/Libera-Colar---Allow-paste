@@ -222,10 +222,38 @@
         padding: 20px 24px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 20px; /* espaçamento maior */
         font-weight: 600;
         font-size: 15px;
         user-select: none;
+      }
+      #content label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        margin-bottom: 0;
+      }
+      #content small {
+        font-size: 10px;
+        opacity: 0.8;
+        margin-top: -12px;
+        margin-left: 28px;
+        margin-bottom: 0;
+      }
+      #authorLink {
+        margin-top: 12px;
+        color: rgb(102, 113, 255);
+        font-weight: 600;
+        text-decoration: underline;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.3s ease;
+        text-align: center;
+        width: 100%;
+      }
+      #authorLink:hover {
+        color: rgb(102, 113, 184);
       }
       #footer {
         background: #121212;
@@ -241,19 +269,6 @@
         gap: 8px;
         cursor: move;
         color: white;
-      }
-      #authorLink {
-        color: #ff3cac;
-        font-weight: 600;
-        text-decoration: underline;
-        cursor: pointer;
-        user-select: none;
-        transition: color 0.3s ease;
-        text-align: center;
-        width: 100%;
-      }
-      #authorLink:hover {
-        color: #ff71b8;
       }
       #clockedate {
         font-weight: 600;
@@ -310,24 +325,13 @@
           <input type="checkbox" id="darkModeCheck" />
           Ativar Modo Escuro
         </label>
-        <a id="authorLink" href="https://github.com/seuUsuario" target="_blank" rel="noopener noreferrer">@autor</a>
+        <a id="authorLink" href="https://github.com/peagakkk" target="_blank" rel="noopener noreferrer">@autor</a>
       </div>
       <div id="footer">
         <span>© 2025</span>
       </div>
     `;
     document.body.appendChild(menu);
-
-    // Atualiza data/hora no menu
-    const clockElem = menu.querySelector("#clockedate");
-    function updateClock() {
-      const d = new Date();
-      const optionsDate = { weekday: "long", day: "2-digit", month: "long", year: "numeric" };
-      const optionsTime = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "America/Sao_Paulo" };
-      clockElem.textContent = d.toLocaleDateString("pt-BR", optionsDate) + " " + d.toLocaleTimeString("pt-BR", optionsTime);
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
 
     // Drag support for topbar and footer
     let dragging = false, offsetX = 0, offsetY = 0;
@@ -365,9 +369,9 @@
       z-index: 999999999;
       padding: 8px 16px;
       border-radius: 10px;
-      border: 3px solid #ff3cac;
-      background: #121212;
-      color: #ff3cac;
+      border: 3px rgb(255, 255, 255);
+      background:rgb(255, 0, 0);
+      color:rgb(250, 247, 248);
       font-family: 'Roboto Mono', monospace;
       cursor: pointer;
       user-select: none;
