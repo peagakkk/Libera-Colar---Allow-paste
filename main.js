@@ -161,7 +161,7 @@ javascript:(() => {
         <a id="authorLink" href="https://github.com/peagakkk" target="_blank" rel="noopener noreferrer">@autor</a>
       </div>
       <div id="footer">
-        <span>© 2025</span>
+        <span>id="authorLink" href="https://github.com/peagakkk" target="_blank" rel="noopener noreferrer">@autor ©2025</span>
       </div>
     `;
     document.body.appendChild(menu);
