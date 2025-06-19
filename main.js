@@ -179,6 +179,8 @@
         display: flex;
         flex-direction: column;
         z-index: 999999999;
+        gap: 16px; /* espaçamento entre as opções */
+        padding-bottom: 12px;
       }
       #allow-paste-menu:hover {
         opacity: 1;
@@ -219,41 +221,15 @@
       }
       #content {
         flex-grow: 1;
-        padding: 20px 24px;
+        padding: 0 24px 0 24px;
         display: flex;
         flex-direction: column;
-        gap: 20px; /* espaçamento maior */
         font-weight: 600;
         font-size: 15px;
         user-select: none;
       }
       #content label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        margin-bottom: 0;
-      }
-      #content small {
-        font-size: 10px;
-        opacity: 0.8;
-        margin-top: -12px;
-        margin-left: 28px;
-        margin-bottom: 0;
-      }
-      #authorLink {
-        margin-top: 12px;
-        color: rgb(102, 113, 255);
-        font-weight: 600;
-        text-decoration: underline;
-        cursor: pointer;
-        user-select: none;
-        transition: color 0.3s ease;
-        text-align: center;
-        width: 100%;
-      }
-      #authorLink:hover {
-        color: rgb(102, 113, 184);
+        margin-bottom: 12px;
       }
       #footer {
         background: #121212;
@@ -269,6 +245,19 @@
         gap: 8px;
         cursor: move;
         color: white;
+      }
+      #authorLink {
+        color:rgb(102, 113, 255);
+        font-weight: 600;
+        text-decoration: underline;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.3s ease;
+        text-align: center;
+        width: 100%;
+      }
+      #authorLink:hover {
+        color:rgb(102, 113, 184);
       }
       #clockedate {
         font-weight: 600;
@@ -304,6 +293,7 @@
 
   // 5) Cria o menu com todos elementos: allow paste + dark mode + autor
   function createMenu() {
+    if (document.getElementById("allow-paste-menu")) return document.getElementById("allow-paste-menu");
     const menu = document.createElement("div");
     menu.id = "allow-paste-menu";
     menu.innerHTML = `
@@ -318,10 +308,10 @@
           <input type="checkbox" id="unlockPaste" />
           Desbloquear colagem (1ms)
         </label>
-        <small style="font-size: 10px; opacity: 0.8;">
+        <small style="font-size: 10px; opacity: 0.8; margin-bottom: 12px;">
           ! Ao colar, todo o texto anterior será <span style="color: red; text-shadow: 0 0 2px red, 0 0 4px red;">limpado.</span>
         </small>
-        <label for="darkModeCheck" style="margin-top: 12px;">
+        <label for="darkModeCheck">
           <input type="checkbox" id="darkModeCheck" />
           Ativar Modo Escuro
         </label>
@@ -332,56 +322,6 @@
       </div>
     `;
     document.body.appendChild(menu);
-
-    // Drag support for topbar and footer
-    let dragging = false, offsetX = 0, offsetY = 0;
-    function dragStart(e) {
-      dragging = true;
-      offsetX = e.clientX - menu.offsetLeft;
-      offsetY = e.clientY - menu.offsetTop;
-      e.preventDefault();
-    }
-    function dragEnd() { dragging = false; }
-    function dragMove(e) {
-      if (!dragging) return;
-      menu.style.left = (e.clientX - offsetX) + "px";
-      menu.style.top = (e.clientY - offsetY) + "px";
-    }
-    menu.querySelector("#topbar").addEventListener("mousedown", dragStart);
-    menu.querySelector("#footer").addEventListener("mousedown", dragStart);
-    document.addEventListener("mouseup", dragEnd);
-    document.addEventListener("mousemove", dragMove);
-
-    // Close button hides menu
-    menu.querySelector("#topbarCloseBtn").onclick = () => {
-      menu.style.display = "none";
-      showBtn.style.display = "block";
-    };
-
-    // Botão para abrir menu depois de fechar
-    const showBtn = document.createElement("button");
-    showBtn.textContent = "Mostrar Menu";
-    showBtn.style.cssText = `
-      position: fixed;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 999999999;
-      padding: 8px 16px;
-      border-radius: 10px;
-      border: 3px rgb(255, 255, 255);
-      background:rgb(255, 0, 0);
-      color:rgb(250, 247, 248);
-      font-family: 'Roboto Mono', monospace;
-      cursor: pointer;
-      user-select: none;
-    `;
-    document.body.appendChild(showBtn);
-    showBtn.onclick = () => {
-      menu.style.display = "flex";
-      showBtn.style.display = "none";
-    };
-
     return menu;
   }
 
@@ -464,10 +404,83 @@
     }
   }
 
-  // Iniciar tudo
-  loadFont();
-  styleId && createMenu();
-  const menu = document.getElementById("allow-paste-menu") || createMenu();
-  setupPasteUnlock(menu);
-  setupDarkModeToggle(menu);
-})();
+  // 9) Setup drag (desktop + mobile)
+  function setupDrag(menu, showBtn) {
+    let dragging = false, offsetX = 0, offsetY = 0;
+
+    function dragStart(e) {
+      dragging = true;
+      if (e.type === "touchstart") {
+        const touch = e.touches[0];
+        offsetX = touch.clientX - menu.offsetLeft;
+        offsetY = touch.clientY - menu.offsetTop;
+      } else {
+        offsetX = e.clientX - menu.offsetLeft;
+        offsetY = e.clientY - menu.offsetTop;
+      }
+      e.preventDefault();
+    }
+
+    function dragEnd() {
+      dragging = false;
+    }
+
+    function dragMove(e) {
+      if (!dragging) return;
+      let clientX, clientY;
+      if (e.type === "touchmove") {
+        const touch = e.touches[0];
+        clientX = touch.clientX;
+        clientY = touch.clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+      menu.style.left = (clientX - offsetX) + "px";
+      menu.style.top = (clientY - offsetY) + "px";
+    }
+
+    menu.querySelector("#topbar").addEventListener("mousedown", dragStart);
+    menu.querySelector("#footer").addEventListener("mousedown", dragStart);
+    menu.querySelector("#topbar").addEventListener("touchstart", dragStart, { passive: false });
+    menu.querySelector("#footer").addEventListener("touchstart", dragStart, { passive: false });
+
+    document.addEventListener("mouseup", dragEnd);
+    document.addEventListener("touchend", dragEnd);
+
+    document.addEventListener("mousemove", dragMove);
+    document.addEventListener("touchmove", dragMove, { passive: false });
+
+    // Close button hides menu
+    menu.querySelector("#topbarCloseBtn").onclick = () => {
+      menu.style.display = "none";
+      showBtn.style.display = "block";
+    };
+  }
+
+  // 10) Cria botão para mostrar o menu (só um botão criado)
+  function createShowButton(menu) {
+    let showBtn = document.getElementById("show-allow-paste-btn");
+    if (!showBtn) {
+      showBtn = document.createElement("button");
+      showBtn.id = "show-allow-paste-btn";
+      showBtn.textContent = "Mostrar Menu";
+      showBtn.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 999999999;
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: 3px rgb(255, 255, 255);
+        background: rgb(255, 0, 0);
+        color: rgb(250, 247, 248);
+        font-family: 'Roboto Mono', monospace;
+        cursor: pointer;
+        user-select: none;
+      `;
+      document.body.appendChild(showBtn);
+    }
+    showBtn.onclick = () => {
+     
