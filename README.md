@@ -5,11 +5,15 @@ Alow paste for redação parana
 👑 Fck Plataform
 🚀 Como usar em Bookmarklet
 1. 📋 **Copie este código:**
-
+IOS PC
     ```javascript
     javascript:fetch('https://raw.githubusercontent.com/peagakkk/fck-parana/refs/heads/main/main.js').then(r=>r.text()).then(t=>{let s=document.createElement('script');s.textContent=t;document.documentElement.appendChild(s)}).catch(e=>alert('Erro ao carregar o script: '+e));
     ```
-
+Android
+  ```javascript
+   [javascript:(() => {https://raw.githubusercontent.com/peagakkk/fck-parana/refs/heads/main/main.js})();](https://cdn.jsdelivr.net/gh/peagakkk/fck-parana@main/main.js
+)
+    ```
 
 2. ⭐ Crie um favorito no seu navegador e pronto
 
