@@ -1,7 +1,3 @@
-
-https://github.com/user-attachments/assets/1e2d6b2c-e71b-4615-8457-0f47713f7913
- Plataform fck -peagakkjk
-
 Alow paste for redação parana 
 
 👑 Liberar colar
